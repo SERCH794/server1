@@ -1,1351 +1,667 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Producción Inteligente - Moliendas Tizayuca</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #1a237e;
-            --primary-dark: #000051;
-            --primary-light: #534bae;
-            --secondary: #ff9800;
-            --secondary-dark: #f57c00;
-            --secondary-light: #ffb74d;
-            --accent: #4CAF50;
-            --accent-dark: #388E3C;
-            --text-light: #ffffff;
-            --text-dark: #333333;
-            --gray-light: #f5f5f5;
-            --gray: #e0e0e0;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
-            --transition: all 0.3s ease;
-            --border-radius: 10px;
-            --border-radius-lg: 20px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            color: var(--text-dark);
-            background-color: #f9f9f9;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        h1, h2, h3, h4, h5 {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            line-height: 1.3;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--text-light);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .header.scrolled {
-            padding: 10px 0;
-            background: rgba(26, 35, 126, 0.95);
-            backdrop-filter: blur(10px);
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            transition: var(--transition);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--secondary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3);
-        }
-
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
-
-        .logo-text span {
-            color: var(--secondary);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-link {
-            color: var(--text-light);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1rem;
-            transition: var(--transition);
-            position: relative;
-            padding: 5px 0;
-        }
-
-        .nav-link:hover {
-            color: var(--secondary);
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--secondary);
-            transition: var(--transition);
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            background-position: center;
-            color: var(--text-light);
-            padding: 180px 0 100px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--primary) 10%, transparent 30%);
-            opacity: 0.3;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-btns {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 40px;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: var(--transition);
-            font-size: 1rem;
-            cursor: pointer;
-            border: none;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
-            color: white;
-            box-shadow: 0 6px 15px rgba(255, 152, 0, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(255, 152, 0, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            color: var(--primary);
-        }
-
-        /* Features Section */
-        .section {
-            padding: 100px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 15px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: var(--secondary);
-            border-radius: 2px;
-        }
-
-        .section-title p {
-            color: #666;
-            max-width: 700px;
-            margin: 20px auto 0;
-            font-size: 1.1rem;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .feature-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 40px 30px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-15px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-        }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 25px;
-            color: white;
-            font-size: 1.8rem;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-
-        /* Demo Section */
-        .demo {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .demo::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 40%;
-            height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Q50,80 0,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
-            background-size: cover;
-        }
-
-        .demo-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        .demo-text h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .demo-text p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-
-        .demo-image {
-            position: relative;
-            border-radius: var(--border-radius-lg);
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            transform: perspective(1000px) rotateY(-5deg);
-            transition: var(--transition);
-        }
-
-        .demo-image:hover {
-            transform: perspective(1000px) rotateY(0deg);
-        }
-
-        .demo-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        /* Stats Section */
-        .stats {
-            background: var(--gray-light);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            text-align: center;
-        }
-
-        .stat-item {
-            background: white;
-            padding: 40px 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .stat-item:hover {
-            transform: translateY(-10px);
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        .stat-text {
-            font-size: 1.1rem;
-            color: #666;
-        }
-
-        /* Interactive Section */
-        .interactive {
-            background: white;
-        }
-
-        .interactive-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        .interactive-box {
-            background: var(--gray-light);
-            border-radius: var(--border-radius-lg);
-            padding: 40px;
-            text-align: center;
-        }
-
-        .like-section {
-            margin-bottom: 40px;
-        }
-
-        .like-count {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin: 20px 0;
-            transition: var(--transition);
-        }
-
-        .like-btn {
-            background: linear-gradient(135deg, #4267B2 0%, #29487d 100%);
-            color: white;
-            border: none;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            font-size: 1.8rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            box-shadow: 0 6px 15px rgba(66, 103, 178, 0.3);
-        }
-
-        .like-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 10px 20px rgba(66, 103, 178, 0.4);
-        }
-
-        .like-btn.liked {
-            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
-            box-shadow: 0 6px 15px rgba(255, 68, 68, 0.3);
-        }
-
-        .testimonial-slider {
-            position: relative;
-            overflow: hidden;
-            height: 200px;
-        }
-
-        .testimonial {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .testimonial.active {
-            opacity: 1;
-        }
-
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-        }
-
-        .testimonial-author {
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .testimonial-nav {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .testimonial-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--gray);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .testimonial-dot.active {
-            background: var(--secondary);
-            transform: scale(1.2);
-        }
-
-        /* CTA Section */
-        .cta {
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
-            color: white;
-            text-align: center;
-            padding: 100px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 30px 30px;
-            opacity: 0.3;
-            transform: rotate(15deg);
-        }
-
-        .cta h2 {
-            font-size: 2.8rem;
-            margin-bottom: 20px;
-        }
-
-        .cta p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 40px;
-            opacity: 0.9;
-        }
-
-        .btn-cta {
-            background: white;
-            color: var(--secondary-dark);
-            font-size: 1.1rem;
-            padding: 18px 40px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-cta:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-5px);
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--primary-dark);
-            color: white;
-            padding: 80px 0 30px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 50px;
-        }
-
-        .footer-column h3 {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .footer-column h3::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background: var(--secondary);
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: #ccc;
-            text-decoration: none;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-links a:hover {
-            color: var(--secondary);
-            transform: translateX(5px);
-        }
-
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-link {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .social-link:hover {
-            background: var(--secondary);
-            transform: translateY(-5px);
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #aaa;
-            font-size: 0.9rem;
-        }
-
-        /* Floating Elements */
-        .floating-element {
-            position: fixed;
-            z-index: 999;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .hero h1 {
-                font-size: 2.8rem;
-            }
-            
-            .demo-content, .interactive-content {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-            
-            .demo-image {
-                transform: none;
-                order: -1;
-            }
-            
-            .demo-image:hover {
-                transform: scale(1.02);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header-content {
-                padding: 15px 0;
-            }
-            
-            .nav-links {
-                position: fixed;
-                top: 80px;
-                left: 0;
-                width: 100%;
-                background: var(--primary);
-                flex-direction: column;
-                padding: 20px;
-                gap: 0;
-                transform: translateY(-100%);
-                opacity: 0;
-                visibility: hidden;
-                transition: var(--transition);
-                z-index: 999;
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            }
-            
-            .nav-links.active {
-                transform: translateY(0);
-                opacity: 1;
-                visibility: visible;
-            }
-            
-            .nav-link {
-                padding: 15px 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                width: 100%;
-            }
-            
-            .nav-link:last-child {
-                border-bottom: none;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .hero {
-                padding: 150px 0 80px;
-            }
-            
-            .hero h1 {
-                font-size: 2.3rem;
-            }
-            
-            .hero-btns {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-            
-            .section {
-                padding: 70px 0;
-            }
-            
-            .section-title h2 {
-                font-size: 2rem;
-            }
-            
-            .cta h2 {
-                font-size: 2.2rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 1.8rem;
-            }
-            
-            .hero p {
-                font-size: 1rem;
-            }
-            
-            .section-title h2 {
-                font-size: 1.8rem;
-            }
-            
-            .feature-card {
-                padding: 30px 20px;
-            }
-            
-            .stat-number {
-                font-size: 2.5rem;
-            }
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .animate-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Carta Mágica ✨</title>
+  <style>
+    /* reset css */
+    * {
+      min-width: 0;
+      font: inherit;
+      margin: 0;
+      padding: 0;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Estrellas y fondo animado */
+    .stars, .twinkling {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      pointer-events: none;
+    }
+
+    .stars {
+      background: #000 url('https://i.imgur.com/YKY28eT.png') repeat top center;
+      z-index: -3;
+    }
+
+    .twinkling {
+      background: transparent url('https://i.imgur.com/XYMF4ca.png') repeat top center;
+      z-index: -2;
+      animation: move-twink-back 200s linear infinite;
+    }
+
+    @keyframes move-twink-back {
+      from {background-position: 0 0;}
+      to {background-position: -10000px 5000px;}
+    }
+
+    body {
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      position: relative;
+      z-index: 10;
+      padding: 1rem;
+    }
+
+    .title {
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      color: white;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
+      animation: titleGlow 2s ease-in-out infinite;
+      font-family: 'Arial', cursive;
+      letter-spacing: 3px;
+      z-index: 20;
+      text-align: center;
+      padding: 0 1rem;
+    }
+
+    @keyframes titleGlow {
+      0%, 100% { text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6; }
+      50% { text-shadow: 0 0 30px #fff, 0 0 50px #ff4da6, 0 0 70px #ff4da6; }
+    }
+
+    .container-letter {
+      position: relative;
+      width: min(400px, 90vw);
+      height: min(300px, 65vw);
+      cursor: pointer;
+      transition: transform 0.3s;
+      z-index: 30;
+      max-width: 400px;
+      max-height: 300px;
+    }
+
+    .container-letter:hover {
+      transform: scale(1.05);
+    }
+
+    .cover {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #ff6b6b, #ff4757);
+      border-radius: 15px 15px 0 0;
+      transition: transform 0.8s;
+      transform-origin: top;
+      z-index: 10;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .cover-decoration {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: clamp(2rem, 8vw, 3rem);
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0% { transform: translate(-50%, -50%) scale(1); }
+      14% { transform: translate(-50%, -50%) scale(1.3); }
+      28% { transform: translate(-50%, -50%) scale(1); }
+      42% { transform: translate(-50%, -50%) scale(1.3); }
+      70% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .letter-body {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #fff5f5;
+      border-radius: 10px;
+      padding: clamp(10px, 3vw, 20px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+
+    .letter-border {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      right: 5px;
+      bottom: 5px;
+      border: 2px dashed #ff6b6b;
+      border-radius: 10px;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .paper {
+      position: absolute;
+      top: clamp(10px, 3vw, 20px);
+      left: clamp(10px, 3vw, 20px);
+      right: clamp(10px, 3vw, 20px);
+      z-index: 2;
+      font-size: clamp(0.8rem, 2.5vw, 1.1rem);
+      line-height: 1.4;
+      color: #333;
+      text-align: center;
+      font-family: 'Arial', cursive;
+      background: white;
+      padding: clamp(8px, 2vw, 15px);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: all 0.5s;
+      max-height: 80%;
+      overflow-y: auto;
+    }
+
+    /* Scroll personalizado para el texto */
+    .paper::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .paper::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .paper::-webkit-scrollbar-thumb {
+      background: #ff6b6b;
+      border-radius: 10px;
+    }
+
+    .main-heart {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0;
+      opacity: 0;
+      transition: all 0.5s;
+      z-index: 10;
+    }
+
+    /* Mariposas (fondo) */
+    .butterfly-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .butterfly {
+      position: absolute;
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      opacity: 0.6;
+      filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+    }
+
+    /* Posiciones responsivas para mariposas */
+    .butterfly1 { top: 5%; left: 5%; }
+    .butterfly2 { top: 70%; right: 5%; }
+    .butterfly3 { bottom: 10%; left: 10%; }
+    .butterfly4 { top: 30%; right: 10%; }
+    .butterfly5 { bottom: 20%; left: 20%; }
+    .butterfly6 { top: 50%; left: 30%; }
+    .butterfly7 { bottom: 5%; right: 15%; }
+    .butterfly8 { top: 15%; right: 25%; }
+
+    /* Animaciones mariposas */
+    .butterfly1 { animation: fly1 20s linear infinite; }
+    .butterfly2 { animation: fly2 18s linear infinite; animation-delay: -5s; }
+    .butterfly3 { animation: fly3 22s linear infinite; animation-delay: -2s; }
+    .butterfly4 { animation: fly4 16s linear infinite; animation-delay: -8s; }
+    .butterfly5 { animation: fly5 25s linear infinite; animation-delay: -12s; }
+    .butterfly6 { animation: fly1 19s linear infinite; animation-delay: -3s; }
+    .butterfly7 { animation: fly2 21s linear infinite; animation-delay: -7s; }
+    .butterfly8 { animation: fly3 17s linear infinite; animation-delay: -9s; }
+
+    @keyframes fly1 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(50px, -30px) rotate(10deg); }
+      50% { transform: translate(100px, 0) rotate(0deg); }
+      75% { transform: translate(50px, 30px) rotate(-10deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    @keyframes fly2 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(-80px, 40px) rotate(-15deg); }
+      66% { transform: translate(-150px, -20px) rotate(5deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    @keyframes fly3 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(60px, -40px) rotate(20deg); }
+      40% { transform: translate(100px, 20px) rotate(-5deg); }
+      60% { transform: translate(40px, 60px) rotate(15deg); }
+      80% { transform: translate(-30px, 30px) rotate(-10deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    @keyframes fly4 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(-40px, -50px) rotate(-20deg); }
+      50% { transform: translate(-100px, -20px) rotate(5deg); }
+      75% { transform: translate(-50px, 40px) rotate(15deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    @keyframes fly5 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(80px, 30px) rotate(25deg); }
+      40% { transform: translate(40px, 80px) rotate(-15deg); }
+      60% { transform: translate(-30px, 120px) rotate(10deg); }
+      80% { transform: translate(-70px, 40px) rotate(-20deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    /* Sparkles (fondo) */
+    .sparkles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 6;
+    }
+
+    .sparkle {
+      position: absolute;
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      opacity: 0;
+      animation: sparkleFloat 4s ease-in-out infinite;
+    }
+
+    .sparkle:nth-child(1) { top: 10%; left: 10%; }
+    .sparkle:nth-child(2) { top: 20%; right: 15%; }
+    .sparkle:nth-child(3) { bottom: 25%; left: 20%; }
+    .sparkle:nth-child(4) { bottom: 15%; right: 15%; }
+    .sparkle:nth-child(5) { top: 40%; left: 40%; }
+    .sparkle:nth-child(6) { top: 70%; left: 10%; }
+    .sparkle:nth-child(7) { bottom: 30%; right: 25%; }
+    .sparkle:nth-child(8) { top: 80%; right: 30%; }
+
+    @keyframes sparkleFloat {
+      0% { transform: scale(0) rotate(0deg); opacity: 0; }
+      20% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+      40% { transform: scale(0.8) rotate(360deg); opacity: 0.4; }
+      60% { transform: scale(1) rotate(540deg); opacity: 0.6; }
+      80% { transform: scale(0.5) rotate(720deg); opacity: 0.2; }
+      100% { transform: scale(0) rotate(900deg); opacity: 0; }
+    }
+
+    /* Glitter en la carta */
+    .glitter {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8) 0%, transparent 50%);
+      animation: glitter 2s linear infinite;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    @keyframes glitter {
+      0% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
+      25% { transform: translate(5px, 5px) rotate(5deg); opacity: 0.5; }
+      50% { transform: translate(0, 10px) rotate(0deg); opacity: 0.3; }
+      75% { transform: translate(-5px, 5px) rotate(-5deg); opacity: 0.5; }
+      100% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
+    }
+
+    .options {
+      display: flex;
+      gap: clamp(1rem, 3vw, 2rem);
+      z-index: 30;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 0 1rem;
+    }
+
+    .btn-open, .btn-close {
+      padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: bold;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      z-index: 30;
+      white-space: nowrap;
+    }
+
+    .btn-open {
+      background: linear-gradient(135deg, #ff6b6b, #ff4757);
+      color: white;
+    }
+
+    .btn-close {
+      background: linear-gradient(135deg, #7f8c8d, #34495e);
+      color: white;
+    }
+
+    .btn-open:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5);
+    }
+
+    .btn-close:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(52, 73, 94, 0.5);
+    }
+
+    .btn-open:disabled, .btn-close:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .floating-hearts {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .floating-heart {
+      position: absolute;
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      animation: float 8s linear infinite;
+      opacity: 0;
+    }
+
+    .floating-heart:nth-child(1) { left: 5%; animation-delay: 0s; }
+    .floating-heart:nth-child(2) { left: 20%; animation-delay: 1.2s; }
+    .floating-heart:nth-child(3) { left: 35%; animation-delay: 2.4s; }
+    .floating-heart:nth-child(4) { left: 50%; animation-delay: 3.6s; }
+    .floating-heart:nth-child(5) { left: 65%; animation-delay: 4.8s; }
+    .floating-heart:nth-child(6) { left: 80%; animation-delay: 5.5s; }
+    .floating-heart:nth-child(7) { left: 95%; animation-delay: 6.3s; }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(1); opacity: 0; }
+      10% { opacity: 0.8; }
+      90% { opacity: 0.8; }
+      100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+    }
+
+    /* Clases para animaciones de apertura/cierre */
+    .open-cover {
+      transform: rotateX(180deg);
+    }
+
+    .paper.open-paper {
+      z-index: 20;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .paper.close-paper {
+      z-index: 2;
+    }
+
+    .heart-visible {
+      font-size: clamp(2rem, 8vw, 3rem) !important;
+      opacity: 1 !important;
+      animation: heartPop 0.5s forwards !important;
+    }
+
+    @keyframes heartPop {
+      0% { transform: translate(-50%, -50%) scale(0); }
+      50% { transform: translate(-50%, -50%) scale(1.5); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    /* Media queries específicas para móviles */
+    @media (max-width: 480px) {
+      main {
+        gap: 2rem;
+      }
+      
+      .options {
+        gap: 1rem;
+      }
+      
+      .btn-open, .btn-close {
+        padding: 0.8rem 1.2rem;
+        font-size: 1rem;
+      }
+      
+      .paper {
+        line-height: 1.3;
+      }
+    }
+
+    /* Para pantallas muy pequeñas */
+    @media (max-width: 320px) {
+      .options {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn-open, .btn-close {
+        width: 200px;
+        white-space: normal;
+      }
+    }
+
+    /* Para tablets */
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .container-letter {
+        width: 380px;
+        height: 285px;
+      }
+    }
+
+    /* Para pantallas grandes */
+    @media (min-width: 1200px) {
+      .container-letter {
+        width: 450px;
+        height: 340px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <i class="fas fa-industry"></i>
-                    </div>
-                    <div class="logo-text">
-                        Sistema <span>Producción</span>
-                    </div>
-                </div>
-                
-                <button class="mobile-menu-btn" id="mobileMenuBtn">
-                    <i class="fas fa-bars"></i>
-                </button>
-                
-                <nav class="nav-links" id="navLinks">
-                    <a href="#hero" class="nav-link">Inicio</a>
-                    <a href="#features" class="nav-link">Características</a>
-                    <a href="#demo" class="nav-link">Demo</a>
-                    <a href="#interactive" class="nav-link">Interactivo</a>
-                    <a href="#cta" class="nav-link">Contacto</a>
-                </nav>
-            </div>
-        </div>
-    </header>
+  <!-- Fondos decorativos -->
+  <div class="stars"></div>
+  <div class="twinkling"></div>
+  
+  <!-- Mariposas de fondo -->
+  <div class="butterfly-container">
+    <div class="butterfly butterfly1">🦋</div>
+    <div class="butterfly butterfly2">🦋</div>
+    <div class="butterfly butterfly3">🦋</div>
+    <div class="butterfly butterfly4">🦋</div>
+    <div class="butterfly butterfly5">🦋</div>
+    <div class="butterfly butterfly6">🦋</div>
+    <div class="butterfly butterfly7">🦋</div>
+    <div class="butterfly butterfly8">🦋</div>
+  </div>
+  
+  <!-- Brillos de fondo -->
+  <div class="sparkles">
+    <div class="sparkle">✨</div>
+    <div class="sparkle">✨</div>
+    <div class="sparkle">✨</div>
+    <div class="sparkle">✨</div>
+    <div class="sparkle">✨</div>
+    <div class="sparkle">✨</div>
+    <div class="sparkle">✨</div>
+    <div class="sparkle">✨</div>
+  </div>
+  
+  <!-- Corazones flotantes -->
+  <div class="floating-hearts">
+    <div class="floating-heart">❤️</div>
+    <div class="floating-heart">💖</div>
+    <div class="floating-heart">💗</div>
+    <div class="floating-heart">💓</div>
+    <div class="floating-heart">💕</div>
+    <div class="floating-heart">💘</div>
+    <div class="floating-heart">💝</div>
+  </div>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="container">
-            <div class="hero-content animate-on-scroll">
-                <h1>Sistema Inteligente de Gestión de Producción</h1>
-                <p>Optimiza, controla y mejora todos los procesos de tu planta de producción con nuestra plataforma integral. Diseñado específicamente para Moliendas Tizayuca, S.A. de C.V.</p>
-                
-                <div class="hero-btns">
-                    <a href="#demo" class="btn btn-primary">
-                        <i class="fas fa-play-circle"></i> Ver Demo
-                    </a>
-                    <a href="#features" class="btn btn-secondary">
-                        <i class="fas fa-list-alt"></i> Características
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="section" id="features">
-        <div class="container">
-            <div class="section-title animate-on-scroll">
-                <h2>Características Principales</h2>
-                <p>Descubre todas las funcionalidades que nuestro sistema ofrece para optimizar la producción</p>
-            </div>
-            
-            <div class="features-grid">
-                <div class="feature-card animate-on-scroll">
-                    <div class="feature-icon">
-                        <i class="fas fa-clipboard-list"></i>
-                    </div>
-                    <h3>Órdenes de Producción</h3>
-                    <p>Gestión completa de órdenes con generación automática de folios, control de lotes y seguimiento en tiempo real.</p>
-                </div>
-                
-                <div class="feature-card animate-on-scroll">
-                    <div class="feature-icon">
-                        <i class="fas fa-boxes"></i>
-                    </div>
-                    <h3>Control de Inventario</h3>
-                    <p>Seguimiento preciso de materias primas y productos terminados con alertas de stock bajo.</p>
-                </div>
-                
-                <div class="feature-card animate-on-scroll">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Dashboard Inteligente</h3>
-                    <p>Métricas en tiempo real, KPIs y gráficos interactivos para la toma de decisiones informadas.</p>
-                </div>
-                
-                <div class="feature-card animate-on-scroll">
-                    <div class="feature-icon">
-                        <i class="fas fa-bell"></i>
-                    </div>
-                    <h3>Sistema de Alertas</h3>
-                    <p>Notificaciones automáticas para incidencias, mantenimiento y problemas de calidad.</p>
-                </div>
-                
-                <div class="feature-card animate-on-scroll">
-                    <div class="feature-icon">
-                        <i class="fas fa-users-cog"></i>
-                    </div>
-                    <h3>Gestión de Usuarios</h3>
-                    <p>Control de acceso por roles, permisos personalizados y registro de actividades.</p>
-                </div>
-                
-                <div class="feature-card animate-on-scroll">
-                    <div class="feature-icon">
-                        <i class="fas fa-file-pdf"></i>
-                    </div>
-                    <h3>Reportes Automáticos</h3>
-                    <p>Generación de PDFs para órdenes, incidencias e informes de producción.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Demo Section -->
-    <section class="section demo" id="demo">
-        <div class="container">
-            <div class="demo-content">
-                <div class="demo-text animate-on-scroll">
-                    <h2>Interfaz Moderna e Intuitiva</h2>
-                    <p>Nuestro sistema cuenta con una interfaz diseñada pensando en la experiencia del usuario. Navegación fluida, diseño responsivo y colores que reducen la fatiga visual.</p>
-                    <p>Accede desde cualquier dispositivo: computadora, tablet o smartphone, y mantén el control de tu producción en todo momento y lugar.</p>
-                    
-                    <a href="#interactive" class="btn btn-primary" style="margin-top: 20px;">
-                        <i class="fas fa-hand-pointer"></i> Probar Interactivo
-                    </a>
-                </div>
-                
-                <div class="demo-image animate-on-scroll">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Dashboard del Sistema de Producción">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="section stats">
-        <div class="container">
-            <div class="section-title animate-on-scroll">
-                <h2>Resultados Comprobados</h2>
-                <p>El sistema ha demostrado su eficacia en la optimización de procesos productivos</p>
-            </div>
-            
-            <div class="stats-grid">
-                <div class="stat-item animate-on-scroll">
-                    <div class="stat-number" id="stat1">0</div>
-                    <div class="stat-text">Eficiencia Incrementada</div>
-                </div>
-                
-                <div class="stat-item animate-on-scroll">
-                    <div class="stat-number" id="stat2">0</div>
-                    <div class="stat-text">Reducción de Tiempos Muertos</div>
-                </div>
-                
-                <div class="stat-item animate-on-scroll">
-                    <div class="stat-number" id="stat3">0</div>
-                    <div class="stat-text">Órdenes Procesadas</div>
-                </div>
-                
-                <div class="stat-item animate-on-scroll">
-                    <div class="stat-number" id="stat4">0</div>
-                    <div class="stat-text">Clientes Satisfechos</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive Section -->
-    <section class="section interactive" id="interactive">
-        <div class="container">
-            <div class="section-title animate-on-scroll">
-                <h2>Zona Interactiva</h2>
-                <p>Interactúa con nuestra presentación y déjanos tu opinión</p>
-            </div>
-            
-            <div class="interactive-content">
-                <div class="interactive-box animate-on-scroll">
-                    <div class="like-section">
-                        <h3>¿Te gusta nuestro sistema?</h3>
-                        <div class="like-count" id="likeCount">152</div>
-                        <button class="like-btn" id="likeBtn">
-                            <i class="fas fa-thumbs-up"></i>
-                        </button>
-                        <p style="margin-top: 15px; color: #666;">Haz clic para dar "Me gusta"</p>
-                    </div>
-                    
-                    <div class="comment-section" style="margin-top: 30px;">
-                        <h3 style="margin-bottom: 15px;">Deja tu comentario</h3>
-                        <textarea id="commentInput" placeholder="Escribe tu comentario aquí..." style="width: 100%; height: 100px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; resize: vertical;"></textarea>
-                        <button id="submitComment" class="btn btn-primary" style="margin-top: 15px; width: 100%;">
-                            <i class="fas fa-paper-plane"></i> Enviar Comentario
-                        </button>
-                        <div id="commentFeedback" style="margin-top: 15px;"></div>
-                    </div>
-                </div>
-                
-                <div class="interactive-box animate-on-scroll">
-                    <h3 style="margin-bottom: 20px;">Lo que dicen nuestros usuarios</h3>
-                    
-                    <div class="testimonial-slider">
-                        <div class="testimonial active">
-                            <div class="testimonial-text">
-                                "El sistema ha transformado completamente nuestra gestión de producción. La reducción de errores ha sido notable."
-                            </div>
-                            <div class="testimonial-author">- ING.Julio Garcia,Gerente de planta</div>
-                        </div>
-                        
-                        <div class="testimonial">
-                            <div class="testimonial-text">
-                                "La interfaz es increíblemente intuitiva. Nuestro equipo se adaptó en cuestión de días, no de semanas."
-                            </div>
-                            <div class="testimonial-author">- María González, Supervisora de Calidad</div>
-                        </div>
-                        
-                        <div class="testimonial">
-                            <div class="testimonial-text">
-                                "Las alertas automáticas nos han ayudado a prevenir paros de producción. Una herramienta indispensable."
-                            </div>
-                            <div class="testimonial-author">- Carlos Rodríguez, Jefe de Mantenimiento</div>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-nav">
-                        <div class="testimonial-dot active" data-index="0"></div>
-                        <div class="testimonial-dot" data-index="1"></div>
-                        <div class="testimonial-dot" data-index="2"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="section cta" id="cta">
-        <div class="container">
-            <div class="cta-content animate-on-scroll">
-                <h2>¿Listo para transformar tu producción?</h2>
-                <p>Contacta con nuestro equipo para una demostración personalizada y descubre cómo nuestro sistema puede optimizar tus operaciones.</p>
-                
-                <a href="mailto:ventas@moliendastizayuca.com" class="btn btn-cta">
-                    <i class="fas fa-envelope"></i> Solicitar Demostración
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Sistema de Producción</h3>
-                    <p style="color: #ccc; margin-bottom: 20px;">Plataforma integral para la gestión y optimización de procesos productivos.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Enlaces Rápidos</h3>
-                    <ul class="footer-links">
-                        <li><a href="#hero"><i class="fas fa-chevron-right"></i> Inicio</a></li>
-                        <li><a href="#features"><i class="fas fa-chevron-right"></i> Características</a></li>
-                        <li><a href="#demo"><i class="fas fa-chevron-right"></i> Demo</a></li>
-                        <li><a href="#interactive"><i class="fas fa-chevron-right"></i> Interactivo</a></li>
-                        <li><a href="#cta"><i class="fas fa-chevron-right"></i> Contacto</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Características</h3>
-                    <ul class="footer-links">
-                        <li><a href="#"><i class="fas fa-check-circle"></i> Órdenes de Producción</a></li>
-                        <li><a href="#"><i class="fas fa-check-circle"></i> Control de Inventario</a></li>
-                        <li><a href="#"><i class="fas fa-check-circle"></i> Dashboard Inteligente</a></li>
-                        <li><a href="#"><i class="fas fa-check-circle"></i> Sistema de Alertas</a></li>
-                        <li><a href="#"><i class="fas fa-check-circle"></i> Reportes Automáticos</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Contacto</h3>
-                    <ul class="footer-links">
-                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> Tizayuca, Hidalgo</a></li>
-                        <li><a href="tel:+527717113520"><i class="fas fa-phone"></i> +52 771 711 3520</a></li>
-                        <li><a href="mailto:ventas@moliendastizayuca.com"><i class="fas fa-envelope"></i> ventas@moliendastizayuca.com</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="copyright">
-                <p>&copy; 2025 Moliendas Tizayuca, S.A. de C.V. Sistema de Producción Inteligente. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Floating Elements -->
-    <div class="floating-element" style="top: 20%; left: 5%; font-size: 2rem; color: var(--primary-light); opacity: 0.1;">
-        <i class="fas fa-cogs"></i>
+  <main>
+    <h1 class="title">💌 Carta Especial 💌</h1>
+    
+    <div class="container-letter">
+      <div class="cover">
+        <div class="cover-decoration">❤️</div>
+      </div>
+      
+      <div class="letter-body">
+        <span class="heart main-heart">❤️</span>
+        <div class="glitter"></div>
+        <div class="letter-border"></div>
+        <p class="paper" id="mainMessage">
+          En este día quiero agradecerte por estar a mi lado. Gracias por tanto y perdón por tan poco. 
+          Te aprecio mucho Naye, ¡Feliz dia! ✨
+        </p>
+      </div>
     </div>
     
-    <div class="floating-element" style="top: 70%; right: 5%; font-size: 1.5rem; color: var(--secondary); opacity: 0.1; animation-delay: 2s;">
-        <i class="fas fa-chart-bar"></i>
+    <div class="options">
+      <button id="open" class="btn-open">
+        <span>✨</span> Abrir <span>✨</span>
+      </button>
+      <button id="close" class="btn-close">
+        <span>📦</span> Cerrar <span>📦</span>
+      </button>
     </div>
-    
-    <div class="floating-element" style="top: 40%; right: 10%; font-size: 1.8rem; color: var(--primary); opacity: 0.1; animation-delay: 4s;">
-        <i class="fas fa-industry"></i>
-    </div>
+  </main>
 
-    <script>
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const navLinks = document.getElementById('navLinks');
+  <script>
+    // Leer mensaje personalizado de query strings
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const messageCustom = urlSearchParams.get('message');
+
+    if (messageCustom) {
+      const mainMessageElement = document.querySelector('#mainMessage');
+      mainMessageElement.textContent = decodeURI(messageCustom);
+    }
+
+    // Elementos del DOM
+    const btnOpenElement = document.querySelector('#open');
+    const btnCloseElement = document.querySelector('#close');
+    const coverElement = document.querySelector('.cover');
+    const paperElement = document.querySelector('.paper');
+    const heartElement = document.querySelector('.heart');
+
+    // Estado inicial
+    btnCloseElement.disabled = true;
+
+    // Evento abrir
+    btnOpenElement.addEventListener('click', () => {
+      btnOpenElement.disabled = true;
+      btnCloseElement.disabled = false;
+      
+      coverElement.classList.add('open-cover');
+
+      setTimeout(() => {
+        coverElement.style.zIndex = -1;
+        paperElement.classList.remove('close-paper');
+        paperElement.classList.add('open-paper');
         
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            mobileMenuBtn.innerHTML = navLinks.classList.contains('active') 
-                ? '<i class="fas fa-times"></i>' 
-                : '<i class="fas fa-bars"></i>';
-        });
+        // Animar corazón
+        heartElement.classList.add('heart-visible');
         
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-            });
-        });
+        // Crear confeti
+        createConfetti();
         
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('.header');
-            if (window.scrollY > 100) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
+      }, 500);
+    });
+
+    // Evento cerrar
+    btnCloseElement.addEventListener('click', () => {
+      btnOpenElement.disabled = false;
+      btnCloseElement.disabled = true;
+
+      paperElement.classList.remove('open-paper');
+      paperElement.classList.add('close-paper');
+      
+      setTimeout(() => {
+        coverElement.style.zIndex = 10;
+        coverElement.classList.remove('open-cover');
         
-        // Animate on scroll
-        const animateOnScroll = () => {
-            const elements = document.querySelectorAll('.animate-on-scroll');
-            
-            elements.forEach(element => {
-                const elementPosition = element.getBoundingClientRect().top;
-                const screenPosition = window.innerHeight / 1.2;
-                
-                if (elementPosition < screenPosition) {
-                    element.classList.add('visible');
-                }
-            });
-        };
+        // Ocultar corazón
+        heartElement.classList.remove('heart-visible');
         
-        window.addEventListener('scroll', animateOnScroll);
-        window.addEventListener('load', animateOnScroll);
-        
-        // Like button functionality
-        const likeBtn = document.getElementById('likeBtn');
-        const likeCount = document.getElementById('likeCount');
-        let likes = 152;
-        let liked = false;
-        
-        likeBtn.addEventListener('click', () => {
-            if (!liked) {
-                likes++;
-                likeBtn.classList.add('liked');
-                likeBtn.innerHTML = '<i class="fas fa-thumbs-up"></i>';
-                liked = true;
-                
-                // Animation
-                likeBtn.style.transform = 'scale(1.3)';
-                setTimeout(() => {
-                    likeBtn.style.transform = 'scale(1)';
-                }, 300);
-            } else {
-                likes--;
-                likeBtn.classList.remove('liked');
-                liked = false;
-                
-                // Animation
-                likeBtn.style.transform = 'scale(0.9)';
-                setTimeout(() => {
-                    likeBtn.style.transform = 'scale(1)';
-                }, 300);
-            }
-            
-            // Animate counter
-            const target = likes;
-            const current = parseInt(likeCount.textContent);
-            const increment = target > current ? 1 : -1;
-            
-            const updateCounter = () => {
-                if (current !== target) {
-                    likeCount.textContent = current + increment;
-                    setTimeout(updateCounter, 20);
-                }
-            };
-            
-            updateCounter();
-        });
-        
-        // Comment functionality
-        const commentInput = document.getElementById('commentInput');
-        const submitComment = document.getElementById('submitComment');
-        const commentFeedback = document.getElementById('commentFeedback');
-        
-        submitComment.addEventListener('click', () => {
-            const comment = commentInput.value.trim();
-            
-            if (comment.length === 0) {
-                commentFeedback.innerHTML = '<p style="color: #f44336;">Por favor, escribe un comentario.</p>';
-                return;
-            }
-            
-            if (comment.length > 500) {
-                commentFeedback.innerHTML = '<p style="color: #f44336;">El comentario no puede exceder los 500 caracteres.</p>';
-                return;
-            }
-            
-            // Simulate sending comment
-            commentFeedback.innerHTML = '<p style="color: #4CAF50;"><i class="fas fa-check-circle"></i> ¡Gracias por tu comentario! Lo hemos recibido correctamente.</p>';
-            commentInput.value = '';
-            
-            // Reset feedback after 5 seconds
-            setTimeout(() => {
-                commentFeedback.innerHTML = '';
-            }, 5000);
-        });
-        
-        // Testimonial slider
-        const testimonials = document.querySelectorAll('.testimonial');
-        const dots = document.querySelectorAll('.testimonial-dot');
-        let currentTestimonial = 0;
-        
-        const showTestimonial = (index) => {
-            testimonials.forEach(testimonial => {
-                testimonial.classList.remove('active');
-            });
-            
-            dots.forEach(dot => {
-                dot.classList.remove('active');
-            });
-            
-            testimonials[index].classList.add('active');
-            dots[index].classList.add('active');
-            currentTestimonial = index;
-        };
-        
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                showTestimonial(index);
-            });
-        });
-        
-        // Auto-rotate testimonials
-        setInterval(() => {
-            let nextIndex = currentTestimonial + 1;
-            if (nextIndex >= testimonials.length) {
-                nextIndex = 0;
-            }
-            showTestimonial(nextIndex);
-        }, 5000);
-        
-        // Animated stats counter
-        const stat1 = document.getElementById('stat1');
-        const stat2 = document.getElementById('stat2');
-        const stat3 = document.getElementById('stat3');
-        const stat4 = document.getElementById('stat4');
-        
-        const animateCounter = (element, target, suffix = '%') => {
-            let current = 0;
-            const increment = target / 100;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
-                }
-                element.textContent = Math.floor(current) + suffix;
-            }, 20);
-        };
-        
-        // Start counters when stats are visible
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateCounter(stat1, 45, '%');
-                    animateCounter(stat2, 30, '%');
-                    animateCounter(stat3, 1250, '');
-                    animateCounter(stat4, 98, '%');
-                    statsObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.5 });
-        
-        statsObserver.observe(document.querySelector('.stats'));
-        
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Initialize animation on load
-        window.addEventListener('load', () => {
-            // Trigger initial animation
-            setTimeout(() => {
-                animateOnScroll();
-            }, 100);
-        });
-    </script>
+      }, 500);
+    });
+
+    // Función para crear confeti
+    function createConfetti() {
+      for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.style.position = 'fixed';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.top = -10 + 'px';
+          confetti.style.width = Math.random() * 10 + 5 + 'px';
+          confetti.style.height = confetti.style.width;
+          confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+          confetti.style.borderRadius = '50%';
+          confetti.style.pointerEvents = 'none';
+          confetti.style.zIndex = '1000';
+          confetti.style.animation = `fall ${Math.random() * 2 + 2}s linear forwards`;
+          
+          document.body.appendChild(confetti);
+          
+          setTimeout(() => {
+            confetti.remove();
+          }, 4000);
+        }, i * 50);
+      }
+    }
+
+    // Añadir estilo para la animación de confeti
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fall {
+        to {
+          transform: translateY(100vh) rotate(360deg);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
 </body>
 </html>
