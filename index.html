@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre mágico · flores y mariposas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at 30% 40%, #fee4c9, #fcd5b5, #fec6aa);
+            font-family: 'Georgia', 'Comic Sans MS', cursive, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ========== FLORES Y MARIPOSAS ========== */
+        .flor, .mariposa {
+            position: absolute;
+            pointer-events: none;
+            z-index: 2;
+            filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.1));
+            animation: flotar 7s infinite alternate ease-in-out;
+        }
+
+        /* ---- BASE FLORES ---- */
+        .flor::before, .flor::after {
+            content: '';
+            position: absolute;
+            border-radius: 70% 30% 60% 40% / 40% 60% 30% 70%;
+        }
+
+        .flor .centro {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: radial-gradient(circle, #ffee90, #f7b32b);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 0 4px #fce3a4;
+            z-index: 3;
+        }
+
+        /* 20 tipos de flores */
+        .flor-1::before { background: #ff99c8; width: 40px; height: 38px; top: -20px; left: -12px; transform: rotate(-15deg); }
+        .flor-1::after { background: #f4acb7; width: 44px; height: 40px; top: -14px; left: 6px; transform: rotate(25deg); }
+        .flor-2::before { background: #b5e6c3; width: 46px; height: 36px; top: -22px; left: -10px; border-radius: 80% 20% 60% 40%; }
+        .flor-2::after { background: #86cb92; width: 48px; height: 38px; top: -12px; left: 8px; border-radius: 40% 60% 30% 70%; }
+        .flor-3::before { background: #f9b5ac; width: 44px; height: 42px; top: -24px; left: -14px; border-radius: 50% 50% 30% 70%; }
+        .flor-3::after { background: #ee8b8b; width: 46px; height: 44px; top: -12px; left: 4px; border-radius: 30% 70% 50% 50%; }
+        .flor-4::before { background: #f7e2b5; width: 48px; height: 38px; top: -20px; left: -12px; border-radius: 60% 40% 70% 30%; }
+        .flor-4::after { background: #f5c48a; width: 50px; height: 40px; top: -10px; left: 6px; border-radius: 40% 60% 30% 70%; }
+        .flor-5::before { background: #d9b8ff; width: 42px; height: 42px; top: -20px; left: -10px; }
+        .flor-5::after { background: #c596f0; width: 44px; height: 44px; top: -12px; left: 6px; }
+        .flor-6::before { background: #a2e1f0; width: 46px; height: 34px; top: -18px; left: -14px; }
+        .flor-6::after { background: #7bc9e0; width: 48px; height: 40px; top: -8px; left: 4px; }
+        .flor-7::before { background: #fbc8d5; width: 44px; height: 44px; top: -22px; left: -12px; }
+        .flor-7::after { background: #fda5b5; width: 42px; height: 46px; top: -10px; left: 8px; }
+        .flor-8::before { background: #c7e9b0; width: 48px; height: 38px; top: -20px; left: -15px; }
+        .flor-8::after { background: #aad68f; width: 46px; height: 42px; top: -8px; left: 6px; }
+        .flor-9::before { background: #ffcc99; width: 50px; height: 40px; top: -25px; left: -12px; }
+        .flor-9::after { background: #fbb47b; width: 48px; height: 44px; top: -12px; left: 7px; }
+        .flor-10::before { background: #e0bbff; width: 46px; height: 46px; top: -22px; left: -10px; }
+        .flor-10::after { background: #ca9ef7; width: 48px; height: 44px; top: -14px; left: 6px; }
+        .flor-11::before { background: #f6c7b0; width: 44px; height: 42px; top: -20px; left: -14px; }
+        .flor-11::after { background: #f3ac8a; width: 46px; height: 46px; top: -10px; left: 4px; }
+        .flor-12::before { background: #b2f0d1; width: 48px; height: 36px; top: -18px; left: -12px; }
+        .flor-12::after { background: #8edbb6; width: 50px; height: 40px; top: -10px; left: 8px; }
+        .flor-13::before { background: #ffb3ba; width: 44px; height: 44px; top: -22px; left: -12px; }
+        .flor-13::after { background: #ff9999; width: 46px; height: 46px; top: -12px; left: 6px; }
+        .flor-14::before { background: #c5b4e3; width: 48px; height: 38px; top: -20px; left: -14px; }
+        .flor-14::after { background: #b398d6; width: 46px; height: 42px; top: -10px; left: 6px; }
+        .flor-15::before { background: #fada9f; width: 50px; height: 40px; top: -22px; left: -15px; }
+        .flor-15::after { background: #f7ca7a; width: 48px; height: 44px; top: -12px; left: 8px; }
+        .flor-16::before { background: #d5e6a0; width: 46px; height: 46px; top: -24px; left: -12px; }
+        .flor-16::after { background: #bfda7a; width: 48px; height: 44px; top: -14px; left: 6px; }
+        .flor-17::before { background: #fbc0cb; width: 48px; height: 38px; top: -20px; left: -12px; }
+        .flor-17::after { background: #f9a8bb; width: 46px; height: 42px; top: -10px; left: 6px; }
+        .flor-18::before { background: #a7e0f5; width: 44px; height: 44px; top: -22px; left: -14px; }
+        .flor-18::after { background: #7ecbe3; width: 46px; height: 46px; top: -12px; left: 8px; }
+        .flor-19::before { background: #ffc6a9; width: 50px; height: 38px; top: -20px; left: -12px; }
+        .flor-19::after { background: #fdab82; width: 48px; height: 42px; top: -10px; left: 6px; }
+        .flor-20::before { background: #f1c6e0; width: 46px; height: 46px; top: -22px; left: -14px; }
+        .flor-20::after { background: #e59fcb; width: 44px; height: 48px; top: -12px; left: 6px; }
+
+        /* ---- MARIPOSAS ---- */
+        .mariposa {
+            width: 40px;
+            height: 40px;
+            animation: revoloteo 6s infinite alternate, cambioColor 12s infinite;
+        }
+
+        .mariposa::before, .mariposa::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 35px;
+            border-radius: 80% 20% 70% 30% / 50% 60% 40% 50%;
+            transform: rotate(-20deg);
+            filter: drop-shadow(2px 6px 6px #a77272);
+        }
+
+        .mariposa::after {
+            left: 22px;
+            transform: rotate(20deg) scaleX(-1);
+        }
+
+        .mariposa .cuerpo {
+            position: absolute;
+            width: 7px;
+            height: 32px;
+            background: #5d3a2e;
+            left: 21px;
+            top: 4px;
+            border-radius: 40%;
+            z-index: 5;
+        }
+
+        .mariposa-1::before, .mariposa-1::after { background: #f5a6d0; }
+        .mariposa-2::before, .mariposa-2::after { background: #a4d0f0; }
+        .mariposa-3::before, .mariposa-3::after { background: #c2e0a8; }
+        .mariposa-4::before, .mariposa-4::after { background: #f7d38b; }
+        .mariposa-5::before, .mariposa-5::after { background: #e0b0ff; }
+        .mariposa-6::before, .mariposa-6::after { background: #f9acb5; }
+        .mariposa-7::before, .mariposa-7::after { background: #b0e6d9; }
+        .mariposa-8::before, .mariposa-8::after { background: #ffc8a2; }
+        .mariposa-9::before, .mariposa-9::after { background: #cfb0f0; }
+        .mariposa-10::before, .mariposa-10::after { background: #f2b0d0; }
+        .mariposa-11::before, .mariposa-11::after { background: #b0e0c0; }
+        .mariposa-12::before, .mariposa-12::after { background: #fed0bb; }
+
+        @keyframes cambioColor {
+            0% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(20deg); }
+            100% { filter: hue-rotate(0deg); }
+        }
+
+        /* Posiciones flores */
+        .f1 { top: 3%; left: 2%; } .f2 { top: 10%; left: 90%; } .f3 { top: 70%; left: 8%; }
+        .f4 { top: 85%; left: 78%; } .f5 { top: 40%; left: 95%; } .f6 { top: 92%; left: 42%; }
+        .f7 { top: 18%; left: 47%; } .f8 { top: 63%; left: 25%; } .f9 { top: 33%; left: 15%; }
+        .f10 { top: 77%; left: 88%; } .f11 { top: 15%; left: 72%; } .f12 { top: 52%; left: 68%; }
+        .f13 { top: 96%; left: 18%; } .f14 { top: 8%; left: 55%; } .f15 { top: 45%; left: 48%; }
+        .f16 { top: 28%; left: 82%; } .f17 { top: 82%; left: 55%; } .f18 { top: 48%; left: 5%; }
+        .f19 { top: 22%; left: 20%; } .f20 { top: 72%; left: 32%; } .f21 { top: 12%; left: 12%; }
+        .f22 { top: 58%; left: 74%; } .f23 { top: 37%; left: 62%; } .f24 { top: 67%; left: 42%; }
+        .f25 { top: 88%; left: 12%; } .f26 { top: 5%; left: 30%; } .f27 { top: 50%; left: 85%; }
+        .f28 { top: 28%; left: 35%; } .f29 { top: 94%; left: 68%; } .f30 { top: 42%; left: 22%; }
+
+        /* Posiciones mariposas */
+        .m1 { top: 16%; left: 12%; } .m2 { top: 75%; left: 20%; } .m3 { top: 30%; left: 70%; }
+        .m4 { top: 55%; left: 82%; } .m5 { top: 85%; left: 65%; } .m6 { top: 10%; left: 42%; }
+        .m7 { top: 45%; left: 28%; } .m8 { top: 65%; left: 48%; } .m9 { top: 22%; left: 92%; }
+        .m10 { top: 92%; left: 8%; } .m11 { top: 38%; left: 56%; } .m12 { top: 5%; left: 78%; }
+        .m13 { top: 72%; left: 35%; } .m14 { top: 18%; left: 62%; } .m15 { top: 60%; left: 15%; }
+        .m16 { top: 47%; left: 92%; } .m17 { top: 80%; left: 48%; } .m18 { top: 25%; left: 5%; }
+        .m19 { top: 33%; left: 78%; } .m20 { top: 95%; left: 55%; }
+
+        @keyframes flotar {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-22px) rotate(4deg); }
+        }
+
+        @keyframes revoloteo {
+            0% { transform: translate(0, 0) rotate(-8deg) scale(1); }
+            100% { transform: translate(18px, -16px) rotate(12deg) scale(1.15); }
+        }
+
+        /* ========== SOBRE INTERACTIVO ========== */
+        .sobre-container {
+            position: relative;
+            z-index: 50;
+            width: 100%;
+            max-width: 650px;
+            perspective: 2000px;
+            filter: drop-shadow(0 30px 25px rgba(110, 50, 20, 0.4));
+        }
+
+        #abrir-sobre {
+            display: none;
+        }
+
+        /* Etiqueta que actuará como área de clic para abrir/cerrar */
+        .sobre {
+            cursor: pointer;
+            display: block;
+            position: relative;
+            background: transparent;
+        }
+
+        /* Solapa superior (se levanta) */
+        .solapa-superior {
+            position: absolute;
+            top: -30px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 85%;
+            height: 70px;
+            background: #fbdbb5;
+            border: 5px solid #e5b276;
+            border-radius: 100px 100px 30px 30px;
+            box-shadow: 0 -15px 0 #c6935a, 0 15px 15px rgba(0,0,0,0.15);
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #7b4a2c;
+            transform-origin: top;
+            transition: transform 0.6s cubic-bezier(0.3, 0.9, 0.4, 1.1), background 0.3s;
+            font-family: 'Brush Script MT', cursive;
+            pointer-events: none;
+        }
+
+        .solapa-superior span {
+            transform: rotate(-3deg);
+        }
+
+        /* Base del sobre */
+        .sobre-base {
+            background: #fde5c8;
+            border: 6px solid #e7b87b;
+            border-radius: 30px 30px 20px 20px;
+            padding: 40px 35px 90px 35px;
+            box-shadow: 0 25px 0 #b47d56, inset 0 -8px 20px #ffe2b3;
+            position: relative;
+            z-index: 5;
+            transition: all 0.5s;
+        }
+
+        /* ===== CARTA INTERIOR CON SCROLL ===== */
+        .carta-interior {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            background: #fff9f0;
+            border-radius: 30px;
+            box-shadow: inset 0 0 0 4px #fbdbb0;
+            padding: 0 20px;
+            margin: 0;
+            transition: max-height 0.8s ease-in-out, opacity 0.5s ease, padding 0.5s, margin 0.5s;
+            transform-origin: top;
+        }
+
+        /* Contenedor con scroll para el texto */
+        .contenido-carta-scroll {
+            max-height: 350px;  /* Altura máxima antes del scroll */
+            overflow-y: auto;    /* Barra de scroll vertical */
+            padding-right: 15px; /* Espacio para la barra */
+            scrollbar-width: thin;
+            scrollbar-color: #eba46a #fff0dd;
+        }
+
+        /* Estilos para la barra de scroll en Chrome/Safari/Edge */
+        .contenido-carta-scroll::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .contenido-carta-scroll::-webkit-scrollbar-track {
+            background: #fff0dd;
+            border-radius: 10px;
+        }
+
+        .contenido-carta-scroll::-webkit-scrollbar-thumb {
+            background: #eba46a;
+            border-radius: 10px;
+            border: 2px solid #fbdbb0;
+        }
+
+        .contenido-carta-scroll::-webkit-scrollbar-thumb:hover {
+            background: #d48c4e;
+        }
+
+        #abrir-sobre:checked + .sobre .solapa-superior {
+            transform: rotateX(140deg) translateY(-20px);
+            background: #f7d09c;
+        }
+
+        #abrir-sobre:checked + .sobre .carta-interior {
+            max-height: 800px;
+            opacity: 1;
+            padding: 25px 25px;
+            margin-top: 20px;
+        }
+
+        #abrir-sobre:checked + .sobre .sobre-base {
+            background: #ffe9d4;
+            box-shadow: 0 15px 0 #b47d56, inset 0 -8px 20px #ffeac6;
+        }
+
+        /* Decoraciones del sobre */
+        .decor-sobre {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 2.5rem;
+            opacity: 0.5;
+            transform: rotate(5deg);
+            pointer-events: none;
+        }
+
+        .decor-sobre-izq {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 2.2rem;
+            opacity: 0.5;
+            transform: rotate(-10deg);
+        }
+
+        /* Texto interior de la carta */
+        .frase-destacada {
+            font-size: 4rem;
+            font-family: 'Brush Script MT', cursive;
+            text-align: center;
+            color: #b44d4d;
+            text-shadow: 4px 4px 0 #fce3b5, 6px 6px 0 rgba(235, 165, 90, 0.5);
+            line-height: 1.2;
+            margin-bottom: 25px;
+            border-bottom: 5px dotted #eba46a;
+            padding-bottom: 15px;
+        }
+
+        .mensaje-carta {
+            font-size: 1.7rem;
+            background: #fdefdb;
+            padding: 25px 20px;
+            border-radius: 70px 20px 70px 20px;
+            border: 4px solid #fad19e;
+            color: #4f2e1c;
+            line-height: 1.6;
+            box-shadow: inset 0 0 30px #ffe1bc;
+        }
+
+        .mensaje-carta strong {
+            color: #c0421f;
+            font-size: 2.2rem;
+        }
+
+        .firma {
+            font-size: 2.5rem;
+            font-family: 'Brush Script MT';
+            text-align: right;
+            color: #a55134;
+            margin-top: 20px;
+            border-top: 4px wavy #ecb07e;
+            padding-top: 15px;
+            padding-right: 20px;
+        }
+
+        .sello {
+            width: 90px;
+            height: 90px;
+            background: #ba4646;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #ffde9e;
+            border: 7px solid #aa6234;
+            box-shadow: 0 12px 0 #64371e;
+            transform: rotate(-10deg);
+            margin-top: -30px;
+            margin-left: 20px;
+        }
+
+        /* Pétalos cayendo */
+        .petalo {
+            position: absolute;
+            background: #ffb6c1;
+            width: 20px;
+            height: 20px;
+            border-radius: 80% 0 50% 30%;
+            opacity: 0.6;
+            animation: caer 14s infinite linear;
+            z-index: 1;
+        }
+
+        @keyframes caer {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(120vh) rotate(400deg); opacity: 0; }
+        }
+
+        .p1 { left: 8%; background: #fec89a; animation-delay: 0s; }
+        .p2 { left: 25%; background: #e3b0f0; width: 25px; height: 25px; animation-delay: 2s; }
+        .p3 { left: 42%; background: #b0e6d9; animation-delay: 5s; }
+        .p4 { left: 63%; background: #fbc0cb; animation-delay: 1s; }
+        .p5 { left: 80%; background: #f8d597; animation-delay: 7s; }
+        .p6 { left: 15%; background: #c4b0f0; animation-delay: 3.5s; }
+        .p7 { left: 92%; background: #f1b6c0; animation-delay: 9s; }
+        .p8 { left: 48%; background: #b5d9a8; animation-delay: 4s; }
+        .p9 { left: 72%; background: #f7c5a8; animation-delay: 6.5s; }
+
+        /* Extras alrededor */
+        .extra-flor {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.6;
+            z-index: 25;
+            pointer-events: none;
+        }
+
+        @media (max-width: 600px) {
+            .frase-destacada { font-size: 3rem; }
+            .mensaje-carta { font-size: 1.3rem; }
+            .contenido-carta-scroll { max-height: 250px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== FLORES Y MARIPOSAS ========== -->
+    <!-- (30 flores) -->
+    <div class="flor flor-1 f1"><div class="centro"></div></div>
+    <div class="flor flor-2 f2"><div class="centro"></div></div>
+    <div class="flor flor-3 f3"><div class="centro"></div></div>
+    <div class="flor flor-4 f4"><div class="centro"></div></div>
+    <div class="flor flor-5 f5"><div class="centro"></div></div>
+    <div class="flor flor-6 f6"><div class="centro"></div></div>
+    <div class="flor flor-7 f7"><div class="centro"></div></div>
+    <div class="flor flor-8 f8"><div class="centro"></div></div>
+    <div class="flor flor-9 f9"><div class="centro"></div></div>
+    <div class="flor flor-10 f10"><div class="centro"></div></div>
+    <div class="flor flor-11 f11"><div class="centro"></div></div>
+    <div class="flor flor-12 f12"><div class="centro"></div></div>
+    <div class="flor flor-13 f13"><div class="centro"></div></div>
+    <div class="flor flor-14 f14"><div class="centro"></div></div>
+    <div class="flor flor-15 f15"><div class="centro"></div></div>
+    <div class="flor flor-16 f16"><div class="centro"></div></div>
+    <div class="flor flor-17 f17"><div class="centro"></div></div>
+    <div class="flor flor-18 f18"><div class="centro"></div></div>
+    <div class="flor flor-19 f19"><div class="centro"></div></div>
+    <div class="flor flor-20 f20"><div class="centro"></div></div>
+    <div class="flor flor-1 f21"><div class="centro"></div></div>
+    <div class="flor flor-2 f22"><div class="centro"></div></div>
+    <div class="flor flor-3 f23"><div class="centro"></div></div>
+    <div class="flor flor-4 f24"><div class="centro"></div></div>
+    <div class="flor flor-5 f25"><div class="centro"></div></div>
+    <div class="flor flor-6 f26"><div class="centro"></div></div>
+    <div class="flor flor-7 f27"><div class="centro"></div></div>
+    <div class="flor flor-8 f28"><div class="centro"></div></div>
+    <div class="flor flor-9 f29"><div class="centro"></div></div>
+    <div class="flor flor-10 f30"><div class="centro"></div></div>
+
+    <!-- (20 mariposas) -->
+    <div class="mariposa mariposa-1 m1"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-2 m2"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-3 m3"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-4 m4"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-5 m5"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-6 m6"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-7 m7"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-8 m8"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-9 m9"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-10 m10"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-11 m11"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-12 m12"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-1 m13"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-2 m14"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-3 m15"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-4 m16"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-5 m17"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-6 m18"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-7 m19"><div class="cuerpo"></div></div>
+    <div class="mariposa mariposa-8 m20"><div class="cuerpo"></div></div>
+
+    <!-- Pétalos cayendo -->
+    <div class="petalo p1"></div><div class="petalo p2"></div><div class="petalo p3"></div>
+    <div class="petalo p4"></div><div class="petalo p5"></div><div class="petalo p6"></div>
+    <div class="petalo p7"></div><div class="petalo p8"></div><div class="petalo p9"></div>
+
+    <!-- ========== SOBRE INTERACTIVO CON SCROLL ========== -->
+    <div class="sobre-container">
+        <input type="checkbox" id="abrir-sobre">
+        <label for="abrir-sobre" class="sobre">
+            <!-- Solapa superior -->
+            <div class="solapa-superior">
+                <span>🌸 Ábreme 🌸</span>
+            </div>
+
+            <!-- Base del sobre -->
+            <div class="sobre-base">
+                <div class="decor-sobre">🦋💌🦋</div>
+                <div class="decor-sobre-izq">🌸🌼🌸</div>
+
+                <!-- CARTA INTERIOR CON SCROLL -->
+                <div class="carta-interior">
+                    <div class="frase-destacada">
+                        ¡Para <br> mis hoyuelos favoritos!
+                    </div>
+                    
+                    <!-- CONTENEDOR CON BARRA DE DESPLAZAMIENTO -->
+                    <div class="contenido-carta-scroll">
+                        <div class="mensaje-carta">
+                            <strong>✨ Querida Han ✨</strong> <br><br>
+                            Primero espero que estés bien. Quiero ser honesto y claro contigo: me agradas mucho, te has vuelto el motor de mis días y espero que eso siga así. Contigo me siento como alguien nuevo, con más motivación y ánimos.<br><br>
+                            
+                            Siento mucho lo que hice, de verdad no fue lo correcto, y no lo puedo olvidar. Solo quiero descubrir tu versión más cariñosa conmigo. Me dijiste muchas cosas de las cuales espero que sean verdad. Siempre te voy a proteger de todo y todos.<br><br>
+                            
+                            Eres especial para mí y cada día que pasa me doy cuenta de lo afortunado que soy de tenerte en mi vida. Tus palabras, tu forma de ser, tu manera de ver el mundo... todo en ti me inspira a ser mejor persona.<br><br>
+                            
+                            Prometo cuidarte, respetarte y valorarte siempre. Quiero construir momentos bonitos a tu lado, llenos de risas, abrazos y complicidad.<br><br>
+                            
+                            Gracias por existir, por cruzarte en mi camino y por permitirme una segunda oportunidad. No sé qué nos depare el futuro, pero espero que sea lo mejor<br><br>
+                            
+                            <span style="display:block; text-align:center; font-size:2rem; margin:15px 0;">🦋🌸🦋</span>
+                            
+                            Con todo mi cariño,<br>
+                            <strong>Quien te quiere: checo</strong>
+                        </div>
+                        
+                        <div class="firma">
+                            — con cariño infinito <i>🌼</i>
+                        </div>
+                        
+                        <div class="sello">
+                            🌷
+                        </div>
+                    </div>
+                    <!-- FIN DEL CONTENEDOR CON SCROLL -->
+                </div>
+            </div>
+        </label>
+    </div>
+
+    <!-- mariposas extra alrededor -->
+    <div class="extra-flor" style="top: 18%; left: 8%;">🦋</div>
+    <div class="extra-flor" style="bottom: 12%; right: 5%; animation: flotar 8s infinite;">🌸</div>
+    <div class="extra-flor" style="top: 38%; left: 88%; animation: revoloteo 10s infinite;">🦋</div>
+    <div class="extra-flor" style="bottom: 25%; left: 15%;">🌼</div>
+
+</body>
+</html>
