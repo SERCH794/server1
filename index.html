@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌳 SIMULADOR DE ÁRBOL IMPOSIBLE - RUPTURA RÁPIDA</title>
+    <style>
+        * {
+            user-select: none;
+        }
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .game-container {
+            background: #1a1a2e;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            padding: 20px;
+            width: 950px;
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
+        .title {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 800;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+        .button-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .btn-crecer {
+            background: linear-gradient(135deg, #00a8cc, #0077b6);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s, background 0.1s;
+            box-shadow: 0 5px 15px rgba(0,168,204,0.3);
+            letter-spacing: 1px;
+        }
+        .btn-crecer:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,168,204,0.5);
+        }
+        .btn-crecer:active:not(:disabled) {
+            transform: scale(0.98);
+            background: linear-gradient(135deg, #0088aa, #005588);
+        }
+        .btn-reset {
+            background: linear-gradient(135deg, #e94560, #c62a40);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-reset:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(233,69,96,0.4);
+        }
+        .btn-reset:active {
+            transform: scale(0.98);
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .stress-container {
+            text-align: center;
+            margin: 15px 0 5px;
+        }
+        .stress-label {
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            color: #ffd700;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        .progress-bar {
+            width: 80%;
+            height: 25px;
+            background: #2d2d44;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 0 auto;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00a8cc, #ff6b6b);
+            transition: width 0.2s ease;
+            border-radius: 15px;
+        }
+        .points {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 800;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            color: #ffd700;
+            margin: 10px 0;
+            letter-spacing: 1px;
+        }
+        .messages {
+            background: #0f3460;
+            border-radius: 15px;
+            padding: 15px;
+            height: 120px;
+            overflow-y: auto;
+            font-family: 'Segoe UI', 'Roboto', 'Consolas', monospace;
+            font-size: 13px;
+            color: #e0e0e0;
+            margin-top: 15px;
+            border: 1px solid #2a4a7a;
+            line-height: 1.5;
+        }
+        .message-line {
+            margin: 4px 0;
+            padding: 2px 8px;
+            border-left: 3px solid #ffd700;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            font-size: 13px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+        }
+        .modal-content {
+            background: #1a1a2e;
+            border-radius: 20px;
+            width: 620px;
+            max-width: 90%;
+            max-height: 85%;
+            overflow-y: auto;
+            border: 2px solid #ffd700;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        .modal-header {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ffd700;
+        }
+        .modal-header h2 {
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            font-weight: 800;
+            color: #ffd700;
+            margin: 5px 0;
+        }
+        .modal-body {
+            padding: 20px;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .modal-body strong {
+            color: #ffd700;
+            font-weight: 700;
+        }
+        .modal-footer {
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+        .modal-btn {
+            background: linear-gradient(135deg, #00a8cc, #0077b6);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .modal-btn:hover {
+            transform: scale(1.05);
+        }
+        .info-tooltip {
+            text-align: center;
+            font-size: 11px;
+            color: #888;
+            margin-top: 8px;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f3460;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ffd700;
+            border-radius: 10px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 10px;
+            color: #666;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <div class="title">🌳 SIMULADOR DE ÁRBOL IMPOSIBLE 🌳</div>
+    
+    <canvas id="gameCanvas" width="800" height="450"></canvas>
+    
+    <div class="button-group">
+        <button id="btnCrecer" class="btn-crecer">🌱 CRECER +10 METROS 🌱</button>
+        <button id="btnReset" class="btn-reset">🔄 REINICIAR 🌳</button>
+    </div>
+    <div class="info-tooltip">
+        💡 Tips: Puedes hacer clic repetidas veces o mantener presionado el botón para crecer rápidamente
+    </div>
+    
+    <div class="stress-container">
+        <div class="stress-label">⚠️ ESTRÉS ESTRUCTURAL ⚠️</div>
+        <div class="progress-bar">
+            <div id="stressFill" class="progress-fill"></div>
+        </div>
+    </div>
+    
+    <div class="points" id="pointsDisplay">📊 PUNTOS: 0</div>
+    
+    <div id="messagesArea" class="messages">
+        <div class="message-line">🌱 ¡Presiona CRECER para hacer crecer el árbol! Llegará a 500m y colapsará</div>
+        <div class="message-line">💡 Mantén presionado el botón para crecimiento automático cada 80ms</div>
+    </div>
+    <footer>⚡ Simulación física: cada 10 metros aumenta el estrés estructural | Clic rápido o mantener presionado</footer>
+</div>
+
+<!-- Modal de explicación -->
+<div id="modalExplicacion" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span style="font-size: 40px;">🌳❌🌳</span>
+            <h2>EL ÁRBOL NO SUPERÓ LOS LÍMITES FÍSICOS</h2>
+        </div>
+        <div class="modal-body">
+            <strong>🔬 ¿POR QUÉ NO PUEDE CRECER MÁS? 🔬</strong><br><br>
+            
+            <strong>1️⃣ RESISTENCIA DE MATERIALES</strong><br>
+            • El peso crece con el VOLUMEN (altura³)<br>
+            • La sección del tronco crece con altura²<br>
+            • Tensión de compresión ∝ ALTURA<br>
+            • A 500 metros: ¡la madera se pulveriza!<br><br>
+            
+            <strong>2️⃣ TRANSPORTE DE SAVIA</strong><br>
+            • Límite físico por capilaridad: ~300 metros<br>
+            • Más allá: CAVITACIÓN (burbujas de vapor)<br>
+            • ¡El agua NO puede subir!<br><br>
+            
+            <strong>3️⃣ GRAVEDAD Y ENERGÍA</strong><br>
+            • Energía para subir nutrientes = m × g × h<br>
+            • El costo energético supera la fotosíntesis<br><br>
+            
+            <strong>4️⃣ TIEMPO DE CRECIMIENTO</strong><br>
+            • Una secuoya tarda 2000 años en llegar a 100m<br>
+            • Para 500m tomaría 10,000 años<br><br>
+            
+            <strong>🎯 CONCLUSIÓN: Los árboles reales máximo ~120m<br>
+            ¡La física de materiales LO IMPIDE!</strong>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn" onclick="cerrarModal()">ENTENDIDO ✓</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Variables del juego
+    let alturaArbol = 1.7;
+    const alturaMaxima = 500;
+    let puntuacion = 0;
+    let colapsoOcurrido = false;
+    let animacionActiva = false;
+    let animacionTimeout = null;
+    
+    // Variables para crecimiento continuo (mantener presionado)
+    let crecimientoInterval = null;
+    let isMouseDown = false;
+    
+    // Elementos DOM
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const btnCrecer = document.getElementById('btnCrecer');
+    const btnReset = document.getElementById('btnReset');
+    const stressFill = document.getElementById('stressFill');
+    const pointsDisplay = document.getElementById('pointsDisplay');
+    const messagesArea = document.getElementById('messagesArea');
+    const modal = document.getElementById('modalExplicacion');
+    
+    // Dimensiones canvas
+    const GROUND_Y = 420;
+    const MAX_HEIGHT_PX = 350;
+    
+    // Agregar mensaje al área de mensajes
+    function agregarMensaje(msg, isError = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message-line';
+        messageDiv.style.borderLeftColor = isError ? '#e94560' : '#ffd700';
+        messageDiv.innerHTML = msg;
+        messagesArea.appendChild(messageDiv);
+        messagesArea.scrollTop = messagesArea.scrollHeight;
+        
+        // Limitar número de mensajes
+        while (messagesArea.children.length > 20) {
+            messagesArea.removeChild(messagesArea.firstChild);
+        }
+    }
+    
+    // Actualizar barra de estrés
+    function actualizarStress() {
+        const estres = Math.min(100, (alturaArbol / alturaMaxima) * 100);
+        stressFill.style.width = estres + '%';
+        
+        // Cambiar color según nivel de estrés
+        if (estres >= 80) {
+            stressFill.style.background = 'linear-gradient(90deg, #ff6b6b, #e94560)';
+        } else if (estres >= 50) {
+            stressFill.style.background = 'linear-gradient(90deg, #ffa500, #ff6b6b)';
+        } else {
+            stressFill.style.background = 'linear-gradient(90deg, #00a8cc, #4ecdc4)';
+        }
+        
+        return estres;
+    }
+    
+    // Dibujar árbol normal
+    function dibujarArbol() {
+        ctx.clearRect(0, 0, 800, 450);
+        
+        // Cielo
+        ctx.fillStyle = '#87CEEB';
+        ctx.fillRect(0, 0, 800, GROUND_Y);
+        
+        // Suelo
+        ctx.fillStyle = '#2d5016';
+        ctx.fillRect(0, GROUND_Y, 800, 450 - GROUND_Y);
+        
+        if (!colapsoOcurrido && !animacionActiva) {
+            // Altura en píxeles
+            let alturaPx = (alturaArbol / alturaMaxima) * MAX_HEIGHT_PX;
+            if (alturaPx < 5) alturaPx = 5;
+            if (alturaPx > MAX_HEIGHT_PX) alturaPx = MAX_HEIGHT_PX;
+            
+            const yTop = GROUND_Y - alturaPx;
+            
+            // Color según altura
+            let colorTronco;
+            if (alturaArbol >= 400) colorTronco = '#FF6347';
+            else if (alturaArbol >= 300) colorTronco = '#CD853F';
+            else colorTronco = '#8B4513';
+            
+            // Dibujar tronco
+            ctx.fillStyle = colorTronco;
+            ctx.fillRect(375, yTop, 50, alturaPx);
+            ctx.strokeStyle = '#5c3a21';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(375, yTop, 50, alturaPx);
+            
+            // Dibujar copa
+            ctx.fillStyle = '#228B22';
+            ctx.beginPath();
+            ctx.ellipse(400, yTop - 20, 60, 45, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#006400';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Texto de altura
+            ctx.font = 'bold 18px "Segoe UI", "Roboto", sans-serif';
+            ctx.fillStyle = 'black';
+            ctx.shadowBlur = 0;
+            ctx.fillText(`🌳 Altura: ${alturaArbol.toFixed(1)} metros`, 280, 40);
+            
+            if (alturaArbol >= 120) {
+                ctx.font = 'bold 12px "Segoe UI", "Roboto", sans-serif';
+                ctx.fillStyle = 'red';
+                ctx.fillText('⚠️ ¡EXCEDE LÍMITE NATURAL! ⚠️', 310, 70);
+            }
+        }
+    }
+    
+    // Función para crecer (núcleo del crecimiento)
+    function realizarCrecimiento() {
+        if (colapsoOcurrido) {
+            if (crecimientoInterval) {
+                clearInterval(crecimientoInterval);
+                crecimientoInterval = null;
+            }
+            return false;
+        }
+        if (animacionActiva) return false;
+        
+        // Crecer 10 metros
+        alturaArbol += 10;
+        puntuacion += 10;
+        
+        // Calcular estrés
+        const estres = actualizarStress();
+        
+        agregarMensaje(`📏 Altura: ${alturaArbol.toFixed(1)} m | Estrés: ${estres.toFixed(1)}%`);
+        pointsDisplay.textContent = `📊 PUNTOS: ${puntuacion}`;
+        
+        // Verificar colapso
+        if (alturaArbol >= alturaMaxima) {
+            colapsarArbol();
+            return false;
+        } else {
+            dibujarArbol();
+        }
+        return true;
+    }
+    
+    // Animación de ruptura
+    function animacionRuptura() {
+        animacionActiva = true;
+        btnCrecer.disabled = true;
+        
+        // Detener cualquier crecimiento automático pendiente
+        if (crecimientoInterval) {
+            clearInterval(crecimientoInterval);
+            crecimientoInterval = null;
+        }
+        
+        let paso = 0;
+        
+        function siguientePaso() {
+            ctx.clearRect(0, 0, 800, 450);
+            ctx.fillStyle = '#87CEEB';
+            ctx.fillRect(0, 0, 800, GROUND_Y);
+            ctx.fillStyle = '#2d5016';
+            ctx.fillRect(0, GROUND_Y, 800, 450 - GROUND_Y);
+            
+            paso++;
+            
+            switch(paso) {
+                case 1:
+                    // Árbol con grietas
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(375, 100, 50, 320);
+                    ctx.fillStyle = '#228B22';
+                    ctx.beginPath();
+                    ctx.ellipse(400, 80, 60, 45, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Grietas rojas
+                    ctx.beginPath();
+                    ctx.moveTo(390, 200);
+                    ctx.lineTo(410, 220);
+                    ctx.moveTo(385, 240);
+                    ctx.lineTo(415, 260);
+                    ctx.moveTo(395, 280);
+                    ctx.lineTo(405, 300);
+                    ctx.strokeStyle = 'red';
+                    ctx.lineWidth = 4;
+                    ctx.stroke();
+                    
+                    ctx.font = 'bold 18px "Segoe UI", "Roboto", sans-serif';
+                    ctx.fillStyle = 'red';
+                    ctx.fillText('💥 ¡GRIETAS EN EL TRONCO! 💥', 260, 40);
+                    break;
+                    
+                case 2:
+                    // Árbol partiéndose
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(340, 100, 45, 320);
+                    ctx.fillStyle = '#CD853F';
+                    ctx.fillRect(415, 100, 45, 320);
+                    
+                    ctx.fillStyle = '#228B22';
+                    ctx.beginPath();
+                    ctx.ellipse(360, 80, 50, 40, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.ellipse(440, 80, 50, 40, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.font = 'bold 18px "Segoe UI", "Roboto", sans-serif';
+                    ctx.fillStyle = 'orange';
+                    ctx.fillText('🌪️ ¡SE PARTE POR LA MITAD! 🌪️', 250, 40);
+                    break;
+                    
+                case 3:
+                    // Mitades separadas con astillas
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(310, 100, 45, 320);
+                    ctx.fillStyle = '#CD853F';
+                    ctx.fillRect(445, 100, 45, 320);
+                    
+                    // Astillas volando
+                    for(let i = 0; i < 60; i++) {
+                        let x = 350 + Math.random() * 100;
+                        let y = 180 + Math.random() * 170;
+                        ctx.fillStyle = '#8B4513';
+                        ctx.fillRect(x, y, 4, 6);
+                    }
+                    
+                    ctx.font = 'bold 18px "Segoe UI", "Roboto", sans-serif';
+                    ctx.fillStyle = 'darkred';
+                    ctx.fillText('💨 ¡ASTILLAS VOLANDO! 💨', 280, 40);
+                    break;
+                    
+                case 4:
+                    // Tronco caído
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(250, GROUND_Y - 15, 300, 15);
+                    
+                    // Hojas esparcidas
+                    for(let i = 0; i < 100; i++) {
+                        let x = 230 + Math.random() * 340;
+                        let y = GROUND_Y - 20 + Math.random() * 30;
+                        ctx.fillStyle = '#228B22';
+                        ctx.beginPath();
+                        ctx.ellipse(x, y, 4, 3, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    
+                    ctx.font = 'bold 28px "Segoe UI", "Roboto", sans-serif';
+                    ctx.fillStyle = 'darkred';
+                    ctx.fillText('💀 ¡ÁRBOL DESTRUIDO! 💀', 230, 120);
+                    ctx.font = '14px "Segoe UI", "Roboto", sans-serif';
+                    ctx.fillStyle = 'white';
+                    ctx.fillText('No superó los límites físicos', 280, 160);
+                    break;
+                    
+                default:
+                    // Terminar animación
+                    animacionActiva = false;
+                    btnCrecer.disabled = false;
+                    mostrarModal();
+                    return;
+            }
+            
+            animacionTimeout = setTimeout(siguientePaso, 500);
+        }
+        
+        siguientePaso();
+    }
+    
+    // Mostrar modal explicativo
+    function mostrarModal() {
+        modal.style.display = 'flex';
+    }
+    
+    function cerrarModal() {
+        modal.style.display = 'none';
+    }
+    
+    // Colapsar árbol
+    function colapsarArbol() {
+        if (colapsoOcurrido) return;
+        colapsoOcurrido = true;
+        agregarMensaje('💥 ¡EL ÁRBOL ALCANZÓ SU LÍMITE! 💥', true);
+        animacionRuptura();
+    }
+    
+    // Crecer árbol (wrapper con verificación)
+    function crecerArbol() {
+        if (colapsoOcurrido) {
+            agregarMensaje('❌ El árbol ya colapsó. ¡Presiona REINICIAR!', true);
+            return;
+        }
+        if (animacionActiva) return;
+        
+        realizarCrecimiento();
+    }
+    
+    // Iniciar crecimiento continuo (al mantener presionado)
+    function iniciarCrecimientoContinuo() {
+        if (colapsoOcurrido || animacionActiva) return;
+        
+        // Crecer inmediatamente al presionar
+        realizarCrecimiento();
+        
+        // Iniciar intervalo si aún no existe y no ha colapsado
+        if (!crecimientoInterval && !colapsoOcurrido && !animacionActiva) {
+            crecimientoInterval = setInterval(() => {
+                // Solo seguir creciendo si no ha colapsado y no hay animación
+                if (!colapsoOcurrido && !animacionActiva) {
+                    realizarCrecimiento();
+                } else {
+                    // Si colapsó o hay animación, detener el intervalo
+                    if (crecimientoInterval) {
+                        clearInterval(crecimientoInterval);
+                        crecimientoInterval = null;
+                    }
+                }
+            }, 80); // 80ms entre crecimiento (rápido pero controlado)
+        }
+    }
+    
+    // Detener crecimiento continuo
+    function detenerCrecimientoContinuo() {
+        if (crecimientoInterval) {
+            clearInterval(crecimientoInterval);
+            crecimientoInterval = null;
+        }
+    }
+    
+    // Reiniciar juego
+    function reiniciar() {
+        // Limpiar timeouts e intervalos
+        if (animacionTimeout) {
+            clearTimeout(animacionTimeout);
+            animacionTimeout = null;
+        }
+        if (crecimientoInterval) {
+            clearInterval(crecimientoInterval);
+            crecimientoInterval = null;
+        }
+        
+        alturaArbol = 1.7;
+        puntuacion = 0;
+        colapsoOcurrido = false;
+        animacionActiva = false;
+        
+        actualizarStress();
+        pointsDisplay.textContent = '📊 PUNTOS: 0';
+        
+        // Limpiar mensajes
+        messagesArea.innerHTML = '<div class="message-line">🌱 ¡ÁRBOL REINICIADO! Presiona CRECER para empezar...</div>\n        <div class="message-line">💡 Mantén presionado el botón para crecimiento automático cada 80ms</div>';
+        
+        btnCrecer.disabled = false;
+        dibujarArbol();
+    }
+    
+    // Configurar eventos para clic y mantener presionado
+    function setupButtonEvents() {
+        // Eventos de ratón/toque para mantener presionado
+        btnCrecer.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            if (!btnCrecer.disabled) {
+                iniciarCrecimientoContinuo();
+            }
+        });
+        
+        btnCrecer.addEventListener('mouseup', () => {
+            detenerCrecimientoContinuo();
+        });
+        
+        btnCrecer.addEventListener('mouseleave', () => {
+            detenerCrecimientoContinuo();
+        });
+        
+        // Eventos táctiles para móviles
+        btnCrecer.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!btnCrecer.disabled) {
+                iniciarCrecimientoContinuo();
+            }
+        });
+        
+        btnCrecer.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            detenerCrecimientoContinuo();
+        });
+        
+        // Clic normal (también funciona independientemente)
+        btnCrecer.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // El clic ya está cubierto por mousedown, pero lo mantenemos por compatibilidad
+            // Evitamos duplicar porque mousedown ya ejecuta un crecimiento
+        });
+    }
+    
+    // Eventos
+    btnReset.addEventListener('click', reiniciar);
+    
+    // Cerrar modal al hacer clic fuera
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+    
+    // Configurar eventos especiales para el botón de crecimiento
+    setupButtonEvents();
+    
+    // También permitir clics normales sin mantener presionado (a través del evento click adicional)
+    btnCrecer.addEventListener('click', (e) => {
+        // Prevenir doble crecimiento si ya se disparó con mousedown
+        // El mousedown ya hace crecer, así que no hacemos nada extra aquí para evitar duplicados
+    });
+    
+    // Dibujo inicial
+    dibujarArbol();
+    actualizarStress();
+</script>
+</body>
+</html>
