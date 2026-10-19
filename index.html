@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Línea de Tiempo Codificada: 1871-1876</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 { color: #333; text-align: center; }
+        .instrucciones { color: #666; margin-bottom: 20px; text-align: center; }
+        
+        /* Contenedor de la línea de tiempo */
+        .timeline {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 40px;
+            gap: 10px;
+        }
+        .slot {
+            background-color: #fff;
+            border: 3px dashed #ccc;
+            border-radius: 8px;
+            width: 120px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+        .slot .year { font-size: 1.5rem; font-weight: bold; color: #888; }
+        .slot .code { font-size: 0.8rem; color: #aaa; margin-top: 5px; }
+        
+        /* Estilos cuando se arrastra sobre el slot */
+        .slot.hover { background-color: #e0f7fa; border-color: #00bcd4; }
+
+        /* Las tarjetas */
+        .tarjetas-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            max-width: 1000px;
+        }
+        .tarjeta {
+            background-color: #2196F3;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            width: 200px;
+            text-align: center;
+            cursor: grab;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, background-color 0.2s;
+            user-select: none;
+        }
+        .tarjeta:active { cursor: grabbing; }
+        .tarjeta.dragging { opacity: 0.5; transform: scale(0.95); }
+        
+        /* Estados de validación */
+        .tarjeta.correcta { background-color: #4CAF50; cursor: default; pointer-events: none; }
+        .tarjeta.incorrecta { background-color: #f44336; animation: shake 0.5s; }
+        
+        /* Efecto de tarjeta fija en el slot */
+        .slot .tarjeta.colocada {
+            background-color: #4CAF50;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            margin: 0;
+            box-shadow: none;
+            border-radius: 5px;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Mensaje de victoria */
+        #mensaje-victoria {
+            display: none;
+            font-size: 2rem;
+            color: #4CAF50;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🔐 El Enigma de la República Restaurada</h1>
+    <p class="instrucciones">Arrastra cada evento histórico al año y código correcto. Si aciertas, la tarjeta se bloqueará. ¡Si te equivocas, rebotará!</p>
+
+    <!-- Línea de tiempo (Slots) -->
+    <div class="timeline" id="timeline">
+        <!-- Los slots se generan con JS -->
+    </div>
+
+    <!-- Contenedor de Tarjetas -->
+    <div class="tarjetas-container" id="tarjetas-container">
+        <!-- Las tarjetas se generan con JS -->
+    </div>
+
+    <div id="mensaje-victoria">¡Felicidades! Has desbloqueado la línea de tiempo correcta. 🎉</div>
+
+    <script>
+        // 1. Definimos los datos: Los eventos, su año correcto y su código secreto.
+        // Nota: Cada evento tiene un ID único para poder validarlo correctamente.
+        const eventos = [
+            { id: "C", texto: "Benito Juárez se reelige por cuarta vez.", year: "1871", codigo: "C-1871" },
+            { id: "B", texto: "Porfirio Díaz proclama el Plan de la Noria.", year: "1871", codigo: "B-1871" },
+            { id: "D", texto: "Lerdo de Tejada asume la presidencia pacíficamente.", year: "1872", codigo: "D-1872" },
+            { id: "E", texto: "Las Leyes de Reforma se incorporan a la Constitución.", year: "1873", codigo: "E-1873" },
+            { id: "A", texto: "Se inaugura el ferrocarril México-Veracruz.", year: "1873", codigo: "A-1873" },
+            { id: "F", texto: "Se reconstruye el Senado como contrapeso político.", year: "1874", codigo: "F-1874" },
+            { id: "G", texto: "Díaz proclama el Plan de Tuxtepec.", year: "1876", codigo: "G-1876" },
+            { id: "H", texto: "Batalla de Tecoac y fin de la República Restaurada.", year: "1876", codigo: "H-1876" }
+        ];
+
+        // 2. Función para mezclar el array (Algoritmo Fisher-Yates)
+        function mezclarArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        const timeline = document.getElementById('timeline');
+        const tarjetasContainer = document.getElementById('tarjetas-container');
+        let tarjetasColocadas = 0;
+
+        // 3. Generar los Slots (Años) en orden cronológico
+        eventos.forEach((evento) => {
+            const slot = document.createElement('div');
+            slot.classList.add('slot');
+            // AQUÍ ESTÁ LA CORRECCIÓN: Guardamos el ID del evento en el slot para validar
+            slot.dataset.targetId = evento.id; 
+            slot.innerHTML = `<div class="year">${evento.year}</div><div class="code">${evento.codigo}</div>`;
+            
+            // Eventos para Drag & Drop
+            slot.addEventListener('dragover', e => {
+                e.preventDefault();
+                if (!slot.classList.contains('lleno')) {
+                    slot.classList.add('hover');
+                }
+            });
+            slot.addEventListener('dragleave', () => slot.classList.remove('hover'));
+            
+            slot.addEventListener('drop', e => {
+                e.preventDefault();
+                slot.classList.remove('hover');
+                
+                const tarjetaId = e.dataTransfer.getData('text/plain');
+                const tarjeta = document.getElementById(tarjetaId);
+                
+                // AQUÍ ESTÁ LA CORRECCIÓN: Comparamos el ID de la tarjeta con el ID esperado en el slot
+                if (tarjeta.dataset.id === slot.dataset.targetId) {
+                    // Es correcta
+                    tarjeta.classList.add('correcta', 'colocada');
+                    tarjeta.draggable = false;
+                    slot.appendChild(tarjeta);
+                    slot.classList.add('lleno');
+                    tarjetasColocadas++;
+                    
+                    if (tarjetasColocadas === eventos.length) {
+                        document.getElementById('mensaje-victoria').style.display = 'block';
+                    }
+                } else {
+                    // Es incorrecta
+                    tarjeta.classList.add('incorrecta');
+                    setTimeout(() => tarjeta.classList.remove('incorrecta'), 500);
+                }
+            });
+            
+            timeline.appendChild(slot);
+        });
+
+        // 4. Generar las Tarjetas (Mezcladas)
+        const eventosMezclados = mezclarArray([...eventos]); // Copia del array mezclada
+
+        eventosMezclados.forEach(evento => {
+            const tarjeta = document.createElement('div');
+            tarjeta.classList.add('tarjeta');
+            tarjeta.id = `tarjeta-${evento.id}`;
+            tarjeta.draggable = true;
+            tarjeta.textContent = evento.texto;
+            
+            // Guardamos los datos en el DOM de la tarjeta
+            tarjeta.dataset.id = evento.id; // CORRECCIÓN: Guardamos el ID
+            
+            // Eventos para Drag & Drop
+            tarjeta.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', tarjeta.id);
+                tarjeta.classList.add('dragging');
+            });
+            tarjeta.addEventListener('dragend', () => {
+                tarjeta.classList.remove('dragging');
+            });
+            
+            tarjetasContainer.appendChild(tarjeta);
+        });
+    </script>
+</body>
+</html>
